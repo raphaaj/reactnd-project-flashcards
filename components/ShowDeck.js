@@ -1,35 +1,53 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import * as DecksAPI from '../utils/DecksAPI';
 import { colors } from '../utils/config';
 
+function getCardsNumberMessage(numberOfCards) {
+  const message = numberOfCards > 1
+    ? `There are ${numberOfCards} cards on this deck.`
+    : 'There is 1 card on this deck';
+
+    return message;
+}
+
 export default class ShowDeck extends Component {
+  state = {
+    deck: {},
+  }
+
+  componentDidMount() {
+    DecksAPI.getDeck('My Test Deck 1').then((deck) => {
+      if (deck !== null) {
+        this.setState({ deck });
+      }
+    });
+  }
+
   render() {
     const {
       deck,
-    } = this.props;
-
-    const cardsCountMsg =
-      deck.numberOfCards > 1
-        ? `There are ${deck.numberOfCards} cards on this deck.`
-        : 'There is 1 card on this deck';
+    } = this.state;
 
     return (
-      <View style={styles.container}>
+      deck === null || JSON.stringify(deck) === '{}'
+        ? null
+        : <View style={styles.container}>
 
-        <View style={styles.header}>
-          <Text style={styles.title}>{deck.title}</Text>
-          <Text>{cardsCountMsg}</Text>
-        </View>
+            <View style={styles.header}>
+              <Text style={styles.title}>{deck.title}</Text>
+              <Text>{getCardsNumberMessage(deck.cards.length)}</Text>
+            </View>
 
-        <TouchableOpacity style={[styles.btn, styles.btnOcean]}>
-          <Text>Start Quiz</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={[styles.btn, styles.btnOcean]}>
+              <Text>Start Quiz</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.btn, styles.btnGrass]}>
-          <Text>Add a New Card</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={[styles.btn, styles.btnGrass]}>
+              <Text>Add a New Card</Text>
+            </TouchableOpacity>
 
-      </View>
+          </View>
     );
   }
 }

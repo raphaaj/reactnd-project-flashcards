@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import * as DecksAPI from '../utils/DecksAPI';
 import { colors } from '../utils/config';
 
 const { height, width } = Dimensions.get('window');
 
 export default class ShowDecks extends Component {
+  state = {
+    decks: [],
+  }
+
+  componentDidMount() {
+    DecksAPI.getDecksArray().then((decks) => {
+      if (decks !== null) {
+        this.setState({ decks });
+      }
+    });
+  }
+
   render() {
     const {
       decks,
-    } = this.props;
+    } = this.state;
 
     return (
       <View style={styles.container}>
@@ -19,7 +32,7 @@ export default class ShowDecks extends Component {
           <View key={deck.title}>
             <TouchableOpacity style={styles.deckContainer}>
               <Text style={styles.deckTitle}>{deck.title}</Text>
-              <Text>{deck.numberOfCards} Cards</Text>
+              <Text>{deck.cards.length} Cards</Text>
             </TouchableOpacity>
           </View>
         ))}
