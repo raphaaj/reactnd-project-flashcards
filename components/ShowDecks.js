@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { colors } from '../utils/config';
 
 const { height, width } = Dimensions.get('window');
 
@@ -17,7 +18,7 @@ export default class ShowDecks extends Component {
         {decks.map((deck) => (
           <View key={deck.title}>
             <TouchableOpacity style={styles.deckContainer}>
-              <Text>{deck.title}</Text>
+              <Text style={styles.deckTitle}>{deck.title}</Text>
               <Text>{deck.numberOfCards} Cards</Text>
             </TouchableOpacity>
           </View>
@@ -41,8 +42,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     width: width - 40,
     alignItems: 'center',
-    borderColor: '#aaa',
+    borderColor: colors.oil,
     borderWidth: 1,
     borderRadius: 4,
+  },
+  deckTitle: {
+    fontSize: 20,
+    margin: 5,
   },
 });
