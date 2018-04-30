@@ -30,7 +30,12 @@ export default class ShowDecks extends Component {
 
         {decks.map((deck) => (
           <View key={deck.title}>
-            <TouchableOpacity style={styles.deckContainer}>
+            <TouchableOpacity
+              style={styles.deckContainer}
+              onPress={() => this.props.navigation.navigate(
+                'ShowDeck', { deckTitle: deck.title }
+              )}
+            >
               <Text style={styles.deckTitle}>{deck.title}</Text>
               <Text>{deck.cards.length} Cards</Text>
             </TouchableOpacity>

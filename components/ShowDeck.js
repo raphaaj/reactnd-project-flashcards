@@ -12,12 +12,17 @@ function getCardsNumberMessage(numberOfCards) {
 }
 
 export default class ShowDeck extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params.deckTitle,
+  })
+
   state = {
     deck: {},
   }
 
   componentDidMount() {
-    DecksAPI.getDeck('My Test Deck 1').then((deck) => {
+    const deckTitle = this.props.navigation.state.params.deckTitle;
+    DecksAPI.getDeck(deckTitle).then((deck) => {
       if (deck !== null) {
         this.setState({ deck });
       }
