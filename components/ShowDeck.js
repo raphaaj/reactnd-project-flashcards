@@ -4,11 +4,14 @@ import * as DecksAPI from '../utils/DecksAPI';
 import { colors } from '../utils/config';
 
 function getCardsNumberMessage(numberOfCards) {
-  const message = numberOfCards > 1
-    ? `There are ${numberOfCards} cards on this deck.`
-    : 'There is 1 card on this deck';
-
-    return message;
+  switch (numberOfCards) {
+    case 0:
+      return 'There are no cards on this deck yet.';
+    case 1:
+      return 'There is 1 card on this deck';
+    default:
+      return `There are ${numberOfCards} cards on this deck.`;
+  }
 }
 
 export default class ShowDeck extends Component {

@@ -36,13 +36,13 @@ export function addDeck(deckObject) {
       if (decks === null) {
         return AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(
           { [deckObject.title]: deckObject }
-        ));
+        )).then(() => deckObject);
       } else if (decks[deckObject.title] !== undefined) {
         return null;
       } else {
         return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify(
           { [deckObject.title]: deckObject }
-        ));
+        )).then(() => deckObject);
       }
     });
 }
