@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
+import { Provider } from 'react-redux';
 import { Constants } from 'expo';
 import { colors, fontSizes } from './utils/config';
+import configureStore from './configureStore';
 import NewDeck from './components/NewDeck';
 import ShowDeck from './components/ShowDeck';
 import ShowDecks from './components/ShowDecks';
@@ -76,10 +78,12 @@ const Stack = StackNavigator({
 export default class App extends Component {
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <FlashCardsStatusBar backgroundColor={colors.oil} />
-        <Stack />
-      </View>
+      <Provider store={configureStore()}>
+        <View style={{ flex: 1 }}>
+          <FlashCardsStatusBar backgroundColor={colors.oil} />
+          <Stack />
+        </View>
+      </Provider>
     );
   }
 }

@@ -1,27 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
-import * as DecksAPI from '../utils/DecksAPI';
+import { connect } from 'react-redux';
 import { colors } from '../utils/config';
 
 const { height, width } = Dimensions.get('window');
 
-export default class ShowDecks extends Component {
-  state = {
-    decks: [],
-  }
-
-  componentDidMount() {
-    DecksAPI.getDecksArray().then((decks) => {
-      if (decks !== null) {
-        this.setState({ decks });
-      }
-    });
-  }
-
+class ShowDecks extends Component {
   render() {
     const {
       decks,
-    } = this.state;
+    } = this.props;
 
     return (
       <View style={styles.container}>
@@ -46,6 +34,15 @@ export default class ShowDecks extends Component {
     );
   }
 }
+
+function mapStateToProps(decksObject, ownProps) {
+  const deckTitles = Object.keys(decksObject);
+  const decks = deckTitles.map((deckTitle) => ({ ...decksObject[deckTitle] }));
+
+  return { decks };
+}
+
+export default connect(mapStateToProps)(ShowDecks);
 
 const styles = StyleSheet.create({
   container: {

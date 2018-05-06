@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import * as DecksAPI from '../utils/DecksAPI';
+import { connect } from 'react-redux';
 import { colors } from '../utils/config';
 
 function getCardsNumberMessage(numberOfCards) {
@@ -14,28 +14,15 @@ function getCardsNumberMessage(numberOfCards) {
   }
 }
 
-export default class ShowDeck extends Component {
+class ShowDeck extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.deckTitle,
   })
 
-  state = {
-    deck: {},
-  }
-
-  componentDidMount() {
-    const deckTitle = this.props.navigation.state.params.deckTitle;
-    DecksAPI.getDeck(deckTitle).then((deck) => {
-      if (deck !== null) {
-        this.setState({ deck });
-      }
-    });
-  }
-
   render() {
     const {
       deck,
-    } = this.state;
+    } = this.props;
 
     return (
       deck === null || JSON.stringify(deck) === '{}'
@@ -59,6 +46,19 @@ export default class ShowDeck extends Component {
     );
   }
 }
+
+function mapStateToProps(decksObject, ownProps) {
+  const deckTitle = ownProps.navigation.state.params.deckTitle;
+  const deck = decksObject[deckTitle] !== undefined
+    ? decksObject[deckTitle]
+    : null;
+
+  return {
+    deck,
+  };
+}
+
+export default connect(mapStateToProps)(ShowDeck);
 
 const styles = StyleSheet.create({
   container: {

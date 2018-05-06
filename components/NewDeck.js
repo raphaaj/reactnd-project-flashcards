@@ -8,12 +8,13 @@ import {
   Dimensions,
   ActivityIndicator
 } from 'react-native';
-import * as DecksAPI from '../utils/DecksAPI';
+import { connect } from 'react-redux';
+import { addDeckAsync } from '../actions';
 import { colors, fontSizes } from '../utils/config';
 
 const { height, width } = Dimensions.get('window');
 
-export default class NewDeck extends Component {
+class NewDeck extends Component {
   state = {
     deckTitle: '',
     processing: false,
@@ -28,22 +29,20 @@ export default class NewDeck extends Component {
       hasErrored: false,
     });
 
-    DecksAPI.addDeck({
-      title: this.state.deckTitle,
-      cards: [],
-    })
+    this.props.addDeck(this.state.deckTitle)
       .then((createdDeck) => {
         this.setState({ processing: false });
         return createdDeck;
       })
       .then((createdDeck) => {
         if (createdDeck !== null) {
+          this.setState({ deckTitle: '' });
           this.props.navigation.goBack();
         } else {
           this.setState({ hasErrored: true });
         }
       })
-      .catch(() => this.props.navigation.goBack());
+      .catch(() => this.setState({ hasErrored: true }));
   }
 
   render() {
@@ -83,6 +82,14 @@ export default class NewDeck extends Component {
     );
   }
 }
+
+function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    addDeck: (title) => dispatch(addDeckAsync(title)),
+  };
+}
+
+export default connect(undefined, mapDispatchToProps)(NewDeck);
 
 const styles = StyleSheet.create({
   container: {
