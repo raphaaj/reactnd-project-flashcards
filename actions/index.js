@@ -2,6 +2,7 @@ import * as DecksAPI from '../utils/DecksAPI';
 
 export const DECKS_SET = 'DECKS_SET';
 export const DECKS_ADD = 'DECKS_ADD';
+export const DECKS_ADD_CARD = 'DECKS_ADD_CARD';
 
 export function setDecks(decks) {
   return {
@@ -14,6 +15,14 @@ export function addDeck(deckObject) {
   return {
     type: DECKS_ADD,
     deckObject,
+  };
+}
+
+export function addCardToDeck(deckTitle, cardObject) {
+  return {
+    type: DECKS_ADD_CARD,
+    deckTitle,
+    cardObject,
   };
 }
 
@@ -38,5 +47,22 @@ export function addDeckAsync(title) {
         return deckObject;
       })
       .catch(() => null);
+  }
+}
+
+export function addCardToDeckAsync(deckTitle, cardObject) {
+  return (dispatch) => {
+    return DecksAPI.addCardToDeck(deckTitle, cardObject)
+      .then((createdCard) => {
+        console.log(createdCard)
+        if (createdCard !== null) {
+          dispatch(addCardToDeck(deckTitle, createdCard));
+        }
+        return createdCard;
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
   }
 }

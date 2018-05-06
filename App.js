@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { Constants } from 'expo';
 import { colors, fontSizes } from './utils/config';
 import configureStore from './configureStore';
+import NewCard from './components/NewCard';
 import NewDeck from './components/NewDeck';
 import ShowDeck from './components/ShowDeck';
 import ShowDecks from './components/ShowDecks';
@@ -60,6 +61,12 @@ const Stack = StackNavigator({
   },
   ShowDeck: {
     screen: ShowDeck,
+  },
+  NewCard: {
+    screen: NewCard,
+    navigationOptions: {
+      title: 'New Card',
+    },
   },
 }, {
   navigationOptions: {

@@ -38,7 +38,12 @@ class ShowDeck extends Component {
               <Text>Start Quiz</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.btn, styles.btnGrass]}>
+            <TouchableOpacity
+              style={[styles.btn, styles.btnGrass]}
+              onPress={() => this.props.navigation.navigate(
+                'NewCard', { deckTitle: deck.title }
+              )}
+            >
               <Text>Add a New Card</Text>
             </TouchableOpacity>
 

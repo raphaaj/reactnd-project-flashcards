@@ -49,7 +49,7 @@ export function addCardToDeck(deckTitle, cardObject) {
         deckObject.cards.push(cardObject);
         return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify(
           { [deckObject.title]: deckObject }
-        ));
+        )).then(() => cardObject);
       }
     });
 }
