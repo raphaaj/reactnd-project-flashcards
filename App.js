@@ -7,6 +7,7 @@ import { colors, fontSizes } from './utils/config';
 import configureStore from './configureStore';
 import NewCard from './components/NewCard';
 import NewDeck from './components/NewDeck';
+import ShowQuiz from './components/ShowQuiz';
 import ShowDeck from './components/ShowDeck';
 import ShowDecks from './components/ShowDecks';
 
@@ -68,6 +69,9 @@ const Stack = StackNavigator({
       title: 'New Card',
     },
   },
+  ShowQuiz: {
+    screen: ShowQuiz,
+  }
 }, {
   navigationOptions: {
     headerStyle: {

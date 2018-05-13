@@ -34,9 +34,16 @@ class ShowDeck extends Component {
               <Text>{getCardsNumberMessage(deck.cards.length)}</Text>
             </View>
 
-            <TouchableOpacity style={[styles.btn, styles.btnOcean]}>
-              <Text>Start Quiz</Text>
-            </TouchableOpacity>
+            {deck.cards.length > 0 &&
+              <TouchableOpacity
+                style={[styles.btn, styles.btnOcean]}
+                onPress={() => this.props.navigation.navigate(
+                  'ShowQuiz', { deck: deck }
+                )}
+              >
+                <Text>Start Quiz</Text>
+              </TouchableOpacity>
+            }
 
             <TouchableOpacity
               style={[styles.btn, styles.btnGrass]}
