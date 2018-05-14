@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
+  View,
   TouchableOpacity,
   KeyboardAvoidingView,
   TextInput,
@@ -64,19 +65,27 @@ class NewCard extends Component {
       <KeyboardAvoidingView style={styles.container}>
         <Text style={styles.header}>{deckTitle}</Text>
 
-        <TextInput
-          style={styles.inputLine}
-          placeholder='Question'
-          value={this.state.question}
-          onChangeText={this.updateCardQuestion}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder='Question'
+            value={this.state.question}
+            onChangeText={this.updateCardQuestion}
+            multiline={true}
+            underlineColorAndroid='transparent'
+          />
+        </View>
 
-        <TextInput
-          style={styles.inputLine}
-          placeholder='Answer'
-          value={this.state.answer}
-          onChangeText={this.updateCardAnswer}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder='Answer'
+            value={this.state.answer}
+            onChangeText={this.updateCardAnswer}
+            multiline={true}
+            underlineColorAndroid='transparent'
+          />
+        </View>
 
         <TouchableOpacity
           style={[styles.btn, styles.btnOcean]}
@@ -144,10 +153,17 @@ const styles = StyleSheet.create({
   btnGrass: {
     backgroundColor: colors.grass,
   },
-  inputLine: {
+  inputContainer: {
     margin: 10,
-    padding: 10,
-    width: width - 25,
+    padding: 20,
+    width: width - 30,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: colors.oil,
+  },
+  input: {
+    lineHeight: 28,
+    width: width - 70,
     textAlign: 'center',
     fontSize: fontSizes.focus,
   }

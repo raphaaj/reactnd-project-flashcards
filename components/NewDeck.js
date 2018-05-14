@@ -56,6 +56,7 @@ class NewDeck extends Component {
           placeholder='Deck Title'
           value={this.state.deckTitle}
           onChangeText={this.updateDeckTitle}
+          underlineColorAndroid={colors.oil}
         />
 
         <TouchableOpacity
