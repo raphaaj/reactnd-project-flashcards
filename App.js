@@ -4,6 +4,7 @@ import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { Constants } from 'expo';
 import { colors, fontSizes } from './utils/config';
+import { setLocalNotification } from './utils/notifications';
 import configureStore from './configureStore';
 import NewCard from './components/NewCard';
 import NewDeck from './components/NewDeck';
@@ -87,6 +88,10 @@ const Stack = StackNavigator({
 });
 
 export default class App extends Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
+
   render() {
     return (
       <Provider store={configureStore()}>

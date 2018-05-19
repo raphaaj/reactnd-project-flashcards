@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { setLocalNotification, clearLocalNotification } from '../utils/notifications';
 import { colors, fontSizes } from '../utils/config';
 import QuizStatus from './QuizStatus';
 
@@ -18,9 +19,12 @@ export default class Quiz extends Component {
 
   hideAnswer = () => this.setState({ showAnswer: false });
 
-  nextCard = () => this.setState((prevState) => ({
-    cardIndex: prevState.cardIndex + 1,
-  }))
+  nextCard = () => {
+    if (this.state.cardIndex + 1 === this.props.navigation.state.params.deck.cards.length) {
+      clearLocalNotification().then(setLocalNotification);
+    }
+    this.setState((prevState) => ({ cardIndex: prevState.cardIndex + 1 }));
+  }
 
   setAnswerCorrect = () => {
     this.setState((prevState) => ({ correctAnswers: prevState.correctAnswers + 1 }));
