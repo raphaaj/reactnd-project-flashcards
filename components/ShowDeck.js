@@ -31,6 +31,7 @@ class ShowDeck extends Component {
 
             <View style={styles.header}>
               <Text style={styles.title}>{deck.title}</Text>
+              <Text>{deck.description}</Text>
               <Text>{getCardsNumberMessage(deck.cards.length)}</Text>
             </View>
 

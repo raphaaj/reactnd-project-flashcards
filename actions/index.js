@@ -37,9 +37,9 @@ export function syncDecksAsync() {
   }
 }
 
-export function addDeckAsync(title) {
+export function addDeckAsync(title, description = '') {
   return (dispatch) => {
-    return DecksAPI.addDeck(title)
+    return DecksAPI.addDeck(title, description)
       .then((deckObject) => {
         if (deckObject !== null) {
           dispatch(addDeck(deckObject));

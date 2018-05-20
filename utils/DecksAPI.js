@@ -18,9 +18,10 @@ export function getDeck(deckTitle) {
     });
 }
 
-export function addDeck(title, cards = []) {
+export function addDeck(title, description, cards = []) {
   const deckObject = {
     title,
+    description,
     cards,
   };
 

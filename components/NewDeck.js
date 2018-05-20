@@ -17,11 +17,14 @@ const { height, width } = Dimensions.get('window');
 class NewDeck extends Component {
   state = {
     deckTitle: '',
+    deckDescription: '',
     processing: false,
     hasErrored: false,
   }
 
   updateDeckTitle = (deckTitle) => this.setState({ deckTitle })
+
+  updateDeckDescription = (deckDescription) => this.setState({ deckDescription })
 
   addNewDeck = () => {
     this.setState({
@@ -29,14 +32,14 @@ class NewDeck extends Component {
       hasErrored: false,
     });
 
-    this.props.addDeck(this.state.deckTitle)
+    this.props.addDeck(this.state.deckTitle, this.state.deckDescription)
       .then((createdDeck) => {
         this.setState({ processing: false });
         return createdDeck;
       })
       .then((createdDeck) => {
         if (createdDeck !== null) {
-          this.setState({ deckTitle: '' });
+          this.setState({ deckTitle: '', deckDescription: '' });
           this.props.navigation.goBack();
         } else {
           this.setState({ hasErrored: true });
@@ -52,9 +55,17 @@ class NewDeck extends Component {
         <Text style={styles.header}>Create a New Deck</Text>
 
         <BoxTextInput
-          placeholder='Deck Title'
+          placeholder='Title'
           value={this.state.deckTitle}
           onChangeText={this.updateDeckTitle}
+        />
+
+        <BoxTextInput
+          placeholder='Description (Optional)'
+          value={this.state.deckDescription}
+          onChangeText={this.updateDeckDescription}
+          multiline
+          numberOfLines={3}
         />
 
         <TouchableOpacity
@@ -84,7 +95,7 @@ class NewDeck extends Component {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    addDeck: (title) => dispatch(addDeckAsync(title)),
+    addDeck: (title, description) => dispatch(addDeckAsync(title, description)),
   };
 }
 
