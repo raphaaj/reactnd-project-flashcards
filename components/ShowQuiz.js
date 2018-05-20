@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { connect } from 'react-redux';
+import { setBestScoreAsync } from '../actions';
 import { setLocalNotification, clearLocalNotification } from '../utils/notifications';
 import { colors, fontSizes } from '../utils/config';
 import QuizStatus from './QuizStatus';
 
-export default class Quiz extends Component {
+class ShowQuiz extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: `Quiz: ${navigation.state.params.deck.title}`,
   })
@@ -20,14 +22,20 @@ export default class Quiz extends Component {
   hideAnswer = () => this.setState({ showAnswer: false });
 
   nextCard = () => {
-    if (this.state.cardIndex + 1 === this.props.navigation.state.params.deck.cards.length) {
+    const deckObject = this.props.navigation.state.params.deck;
+    if (this.state.cardIndex + 1 === deckObject.cards.length) {
+      const currentScore = this.getScore();
       clearLocalNotification().then(setLocalNotification);
+
+      if (deckObject.bestScore === null || currentScore > deckObject.bestScore) {
+        this.props.setNewBestScore(deckObject.title, currentScore);
+      }
     }
     this.setState((prevState) => ({ cardIndex: prevState.cardIndex + 1 }));
   }
 
-  setAnswerCorrect = () => {
-    this.setState((prevState) => ({ correctAnswers: prevState.correctAnswers + 1 }));
+  setAnswerCorrect = async () => {
+    await this.setState((prevState) => ({ correctAnswers: prevState.correctAnswers + 1 }));
     this.nextCard();
     this.hideAnswer();
   }
@@ -39,7 +47,7 @@ export default class Quiz extends Component {
 
   getScore = () => {
     const numberOfCards = this.props.navigation.state.params.deck.cards.length;
-    const score = (100 * this.state.correctAnswers/numberOfCards).toFixed(2);
+    const score = (100 * this.state.correctAnswers/numberOfCards);
 
     return score;
   }
@@ -104,7 +112,7 @@ export default class Quiz extends Component {
               </Text>
 
               <Text style={styles.content}>
-                Your score is {this.getScore()}%
+                Your score is {this.getScore().toFixed(2)}%
               </Text>
 
               <TouchableOpacity
@@ -128,6 +136,14 @@ export default class Quiz extends Component {
     );
   }
 }
+
+function mapDisptchToProps(dispatch, ownProps) {
+  return {
+    setNewBestScore: (deckTitle, newScore) => dispatch(setBestScoreAsync(deckTitle, newScore))
+  };
+}
+
+export default connect(undefined, mapDisptchToProps)(ShowQuiz)
 
 const styles = StyleSheet.create({
   container: {

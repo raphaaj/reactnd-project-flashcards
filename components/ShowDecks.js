@@ -25,6 +25,7 @@ class ShowDecks extends Component {
               )}
             >
               <Text style={styles.deckTitle}>{deck.title}</Text>
+              <Text>{JSON.stringify(deck.bestScore)}</Text>
               <Text>{deck.cards.length} Cards</Text>
             </TouchableOpacity>
           </View>

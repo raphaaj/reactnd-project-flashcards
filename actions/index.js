@@ -3,6 +3,7 @@ import * as DecksAPI from '../utils/DecksAPI';
 export const DECKS_SET = 'DECKS_SET';
 export const DECKS_ADD = 'DECKS_ADD';
 export const DECKS_ADD_CARD = 'DECKS_ADD_CARD';
+export const DECKS_SET_BESTSCORE = 'DECKS_SET_BESTSCORE';
 
 export function setDecks(decks) {
   return {
@@ -24,6 +25,14 @@ export function addCardToDeck(deckTitle, cardObject) {
     deckTitle,
     cardObject,
   };
+}
+
+export function setDeckBestScore(deckTitle, bestScore) {
+  return {
+    type: DECKS_SET_BESTSCORE,
+    deckTitle,
+    bestScore,
+  }
 }
 
 export function syncDecksAsync() {
@@ -64,5 +73,18 @@ export function addCardToDeckAsync(deckTitle, cardObject) {
         console.log(err);
         return null;
       });
+  }
+}
+
+export function setBestScoreAsync(deckTitle, newScore) {
+  return (dispatch) => {
+    return DecksAPI.setDeckBestScore(deckTitle, newScore)
+      .then((deckObject) => {
+        if (deckObject !== null) {
+          dispatch(setDeckBestScore(deckTitle, newScore));
+        }
+        return deckObject;
+      })
+      .catch(() => null);
   }
 }

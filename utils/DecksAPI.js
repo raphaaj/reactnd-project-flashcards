@@ -18,11 +18,12 @@ export function getDeck(deckTitle) {
     });
 }
 
-export function addDeck(title, description, cards = []) {
+export function addDeck(title, description, cards = [], bestScore = null) {
   const deckObject = {
     title,
     description,
     cards,
+    bestScore,
   };
 
   return getDecks()
@@ -51,6 +52,20 @@ export function addCardToDeck(deckTitle, cardObject) {
         return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify(
           { [deckObject.title]: deckObject }
         )).then(() => cardObject);
+      }
+    });
+}
+
+export function setDeckBestScore(deckTitle, bestScore) {
+  return getDeck(deckTitle)
+    .then((deckObject) => {
+      if (deckObject === null) {
+        return null;  // O título não corresponde a um deck válido
+      } else {
+        deckObject.bestScore = bestScore;
+        return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify(
+          { [deckObject.title]: deckObject }
+        )).then(() => deckObject);
       }
     });
 }
