@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { colors, fontSizes } from '../utils/config';
 import { addCardToDeckAsync } from '../actions';
+import BoxTextInput from './BoxTextInput';
 
 const { height, width } = Dimensions.get('window');
 
@@ -65,27 +66,21 @@ class NewCard extends Component {
       <KeyboardAvoidingView style={styles.container}>
         <Text style={styles.header}>{deckTitle}</Text>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder='Question'
-            value={this.state.question}
-            onChangeText={this.updateCardQuestion}
-            multiline={true}
-            underlineColorAndroid='transparent'
-          />
-        </View>
+        <BoxTextInput
+          placeholder='Question'
+          value={this.state.question}
+          onChangeText={this.updateCardQuestion}
+          multiline
+          numberOfLines={2}
+        />
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder='Answer'
-            value={this.state.answer}
-            onChangeText={this.updateCardAnswer}
-            multiline={true}
-            underlineColorAndroid='transparent'
-          />
-        </View>
+        <BoxTextInput
+          placeholder='Answer'
+          value={this.state.answer}
+          onChangeText={this.updateCardAnswer}
+          multiline
+          numberOfLines={2}
+        />
 
         <TouchableOpacity
           style={[styles.btn, styles.btnOcean]}
@@ -153,18 +148,4 @@ const styles = StyleSheet.create({
   btnGrass: {
     backgroundColor: colors.grass,
   },
-  inputContainer: {
-    margin: 10,
-    padding: 20,
-    width: width - 30,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: colors.oil,
-  },
-  input: {
-    lineHeight: 28,
-    width: width - 70,
-    textAlign: 'center',
-    fontSize: fontSizes.focus,
-  }
 });

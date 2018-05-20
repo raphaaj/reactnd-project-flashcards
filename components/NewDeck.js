@@ -4,13 +4,13 @@ import {
   Text,
   TouchableOpacity,
   KeyboardAvoidingView,
-  TextInput,
   Dimensions,
   ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
 import { addDeckAsync } from '../actions';
 import { colors, fontSizes } from '../utils/config';
+import BoxTextInput from './BoxTextInput';
 
 const { height, width } = Dimensions.get('window');
 
@@ -51,12 +51,10 @@ class NewDeck extends Component {
       <KeyboardAvoidingView style={styles.container}>
         <Text style={styles.header}>Create a New Deck</Text>
 
-        <TextInput
-          style={styles.inputLine}
+        <BoxTextInput
           placeholder='Deck Title'
           value={this.state.deckTitle}
           onChangeText={this.updateDeckTitle}
-          underlineColorAndroid={colors.oil}
         />
 
         <TouchableOpacity
@@ -125,11 +123,4 @@ const styles = StyleSheet.create({
   btnGrass: {
     backgroundColor: colors.grass,
   },
-  inputLine: {
-    margin: 10,
-    padding: 10,
-    width: width - 25,
-    textAlign: 'center',
-    fontSize: fontSizes.focus,
-  }
 });
