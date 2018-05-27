@@ -23,14 +23,11 @@ class ShowDecks extends Component {
 
     return (
       <View style={globalStyles.container}>
-        {decks.length > 0
-          ? <FlatList
-              data={decks}
-              renderItem={this.renderDeck}
-              keyExtractor={(deck) => (deck.title)}
-            />
-          : <Text>No Decks Available</Text>
-        }
+        <FlatList
+          data={decks}
+          renderItem={this.renderDeck}
+          keyExtractor={(deck) => (deck.title)}
+        />
       </View>
     );
   }
