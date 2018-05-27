@@ -51,9 +51,10 @@ class NewDeck extends Component {
   render() {
 
     return (
-      <KeyboardAvoidingView style={styles.container}>
-        <Text style={styles.header}>Create a New Deck</Text>
-
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior='padding'
+      >
         <BoxTextInput
           placeholder='Title'
           value={this.state.deckTitle}
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   header: {
     marginVertical: 20,

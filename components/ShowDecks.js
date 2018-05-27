@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { colors } from '../utils/config';
 import DeckScore from './DeckScore';
@@ -7,6 +7,30 @@ import DeckScore from './DeckScore';
 const { height, width } = Dimensions.get('window');
 
 class ShowDecks extends Component {
+  renderDeck = ({ item: deckObject }) => (
+    <View>
+      <TouchableOpacity
+        style={styles.deckContainer}
+        onPress={() => this.props.navigation.navigate(
+          'ShowDeck', { deckTitle: deckObject.title }
+        )}
+      >
+        <View style={styles.deckData}>
+          <Text style={styles.deckTitle}>{deckObject.title}</Text>
+          <Text>{deckObject.cards.length} Cards</Text>
+        </View>
+
+        <View style={styles.deckStatus}>
+          <DeckScore
+            size='small'
+            score={deckObject.bestScore || 0}
+          />
+        </View>
+
+      </TouchableOpacity>
+    </View>
+  )
+
   render() {
     const {
       decks,
@@ -14,30 +38,14 @@ class ShowDecks extends Component {
 
     return (
       <View style={styles.container}>
-        {decks.map((deck) => (
-          <View key={deck.title}>
-            <TouchableOpacity
-              style={styles.deckContainer}
-              onPress={() => this.props.navigation.navigate(
-                'ShowDeck', { deckTitle: deck.title }
-              )}
-            >
-              <View style={styles.deckData}>
-                <Text style={styles.deckTitle}>{deck.title}</Text>
-                <Text>{deck.cards.length} Cards</Text>
-              </View>
-
-              <View style={styles.deckStatus}>
-                <DeckScore
-                  size='small'
-                  score={deck.bestScore || 0}
-                />
-              </View>
-
-            </TouchableOpacity>
-          </View>
-        ))}
-
+        {decks.length > 0
+          ? <FlatList
+              data={decks}
+              renderItem={this.renderDeck}
+              keyExtractor={(deck) => (deck.title)}
+            />
+          : <Text>No Decks Available</Text>
+        }
       </View>
     );
   }
@@ -55,7 +63,7 @@ export default connect(mapStateToProps)(ShowDecks);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },

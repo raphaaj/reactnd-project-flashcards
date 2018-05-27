@@ -63,7 +63,10 @@ class NewCard extends Component {
     const deckTitle = this.props.navigation.state.params.deckTitle;
 
     return (
-      <KeyboardAvoidingView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior='padding'
+      >
         <Text style={styles.header}>{deckTitle}</Text>
 
         <BoxTextInput
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   header: {
     marginVertical: 20,
