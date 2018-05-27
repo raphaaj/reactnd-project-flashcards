@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { colors } from '../utils/config';
+import DeckScore from './DeckScore';
 
 const { height, width } = Dimensions.get('window');
 
@@ -13,9 +14,6 @@ class ShowDecks extends Component {
 
     return (
       <View style={styles.container}>
-
-        <Text>Show Decks</Text>
-
         {decks.map((deck) => (
           <View key={deck.title}>
             <TouchableOpacity
@@ -24,9 +22,18 @@ class ShowDecks extends Component {
                 'ShowDeck', { deckTitle: deck.title }
               )}
             >
-              <Text style={styles.deckTitle}>{deck.title}</Text>
-              <Text>{JSON.stringify(deck.bestScore)}</Text>
-              <Text>{deck.cards.length} Cards</Text>
+              <View style={styles.deckData}>
+                <Text style={styles.deckTitle}>{deck.title}</Text>
+                <Text>{deck.cards.length} Cards</Text>
+              </View>
+
+              <View style={styles.deckStatus}>
+                <DeckScore
+                  size='small'
+                  score={deck.bestScore || 0}
+                />
+              </View>
+
             </TouchableOpacity>
           </View>
         ))}
@@ -53,6 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   deckContainer: {
+    flexDirection: 'row',
     margin: 10,
     paddingHorizontal: 25,
     paddingVertical: 10,
@@ -61,6 +69,14 @@ const styles = StyleSheet.create({
     borderColor: colors.oil,
     borderWidth: 1,
     borderRadius: 4,
+  },
+  deckData: {
+    flex: 3,
+    alignItems: 'center',
+  },
+  deckStatus: {
+    flex: 1,
+    alignItems: 'center',
   },
   deckTitle: {
     fontSize: 20,

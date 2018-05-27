@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { colors } from '../utils/config';
+import DeckScore from './DeckScore';
 
 function getCardsNumberMessage(numberOfCards) {
   switch (numberOfCards) {
@@ -31,6 +32,10 @@ class ShowDeck extends Component {
 
             <View style={styles.header}>
               <Text style={styles.title}>{deck.title}</Text>
+              <DeckScore
+                size='large'
+                score={deck.bestScore || 0}
+              />
               <Text>{deck.description}</Text>
               <Text>{getCardsNumberMessage(deck.cards.length)}</Text>
             </View>
