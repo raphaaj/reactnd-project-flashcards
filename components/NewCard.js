@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -10,7 +9,8 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
-import { colors, fontSizes } from '../utils/config';
+import { colors } from '../utils/config';
+import globalStyles from '../styles';
 import { addCardToDeckAsync } from '../actions';
 import BoxTextInput from './BoxTextInput';
 
@@ -64,10 +64,12 @@ class NewCard extends Component {
 
     return (
       <KeyboardAvoidingView
-        style={styles.container}
+        style={globalStyles.container}
         behavior='padding'
       >
-        <Text style={styles.header}>{deckTitle}</Text>
+        <Text style={[globalStyles.title, { marginBottom: 15 }]}>
+          {deckTitle}
+        </Text>
 
         <BoxTextInput
           placeholder='Question'
@@ -86,12 +88,12 @@ class NewCard extends Component {
         />
 
         <TouchableOpacity
-          style={[styles.btn, styles.btnOcean]}
+          style={[globalStyles.btn, globalStyles.btnOcean]}
           onPress={this.addNewCard}
         >
           {this.state.processing
             ? <ActivityIndicator size='small' color={colors.oil} />
-            : <Text style={styles.normalText}>
+            : <Text style={globalStyles.normalText}>
                 Create New Card
               </Text>
           }
@@ -99,7 +101,7 @@ class NewCard extends Component {
         </TouchableOpacity>
 
         {this.state.hasErrored &&
-          <Text style={[styles.normalText, styles.errorText]}>
+          <Text style={[globalStyles.normalText, { color: colors.red }]}>
             There was an error while creating the card.
           </Text>
         }
@@ -117,38 +119,3 @@ function mapDispatchToProps(dispatch, ownProps) {
 }
 
 export default connect(undefined, mapDispatchToProps)(NewCard);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  header: {
-    marginVertical: 20,
-    fontSize: fontSizes.focus,
-  },
-  normalText: {
-    textAlign: 'center',
-    fontSize: fontSizes.normal,
-    fontWeight: 'normal',
-  },
-  errorText: {
-    color: colors.red,
-  },
-  btn: {
-    alignItems: 'center',
-    margin: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    width: 200,
-    borderRadius: 4,
-  },
-  btnOcean: {
-    backgroundColor: colors.ocean,
-  },
-  btnGrass: {
-    backgroundColor: colors.grass,
-  },
-});

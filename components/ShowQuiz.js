@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
+import { Feather } from '@expo/vector-icons';
 import { setBestScoreAsync } from '../actions';
 import { setLocalNotification, clearLocalNotification } from '../utils/notifications';
-import { colors, fontSizes } from '../utils/config';
+import { colors } from '../utils/config';
+import globalStyles from '../styles';
+import DeckScore from './DeckScore';
 import QuizStatus from './QuizStatus';
 
 class ShowQuiz extends Component {
@@ -56,79 +59,84 @@ class ShowQuiz extends Component {
     const deck = this.props.navigation.state.params.deck;
 
     return (
-      <View style={styles.container}>
-
+      <View style={globalStyles.container}>
 
         {this.state.cardIndex < deck.cards.length
           // Quiz mode
           ? <View style={{ flex: 1 }}>
-              <ScrollView contentContainerStyle={styles.quiz}>
-                <Text style={styles.content}>
-                  {deck.cards[this.state.cardIndex].question}
-                </Text>
-
-                {this.state.showAnswer
-                  ? <View>
-                      <Text style={styles.content}>
-                        {deck.cards[this.state.cardIndex].answer}
-                      </Text>
-
-                      <TouchableOpacity
-                        style={[styles.btn, styles.btnOcean]}
-                        onPress={this.setAnswerCorrect}
-                      >
-                        <Text>Mark as Correct</Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={[styles.btn, styles.btnOcean]}
-                        onPress={this.setWrongAnswer}
-                      >
-                        <Text>Mark as Wrong</Text>
-                      </TouchableOpacity>
-                    </View>
-                  : <View>
-                      <TouchableOpacity
-                        style={[styles.btn, styles.btnOcean]}
-                        onPress={this.viewAnswer}
-                      >
-                        <Text>Check Answer</Text>
-                      </TouchableOpacity>
-                    </View>
-                }
-              </ScrollView>
-
               <QuizStatus
                 currentCard={this.state.cardIndex + 1}
                 remainingCards={deck.cards.length - (this.state.cardIndex + 1)}
               />
 
+              <ScrollView contentContainerStyle={styles.quiz}>
+                <Text style={globalStyles.focusText}>
+                  {deck.cards[this.state.cardIndex].question}
+                </Text>
+
+                {this.state.showAnswer &&
+                  <Text style={[globalStyles.focusText, { marginTop: 15 }]}>
+                    {deck.cards[this.state.cardIndex].answer}
+                  </Text>
+                }
+              </ScrollView>
+
+              {this.state.showAnswer
+                ? <View style={styles.rowContainer}>
+                    <TouchableOpacity
+                      style={[globalStyles.btnRound, globalStyles.btnOceanBorder]}
+                      onPress={this.setAnswerCorrect}
+                    >
+                      <Feather name='check' size={40} color={colors.grass} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[globalStyles.btnRound, globalStyles.btnOceanBorder]}
+                      onPress={this.setWrongAnswer}
+                    >
+                      <Feather name='x' size={40} color={colors.red} />
+                    </TouchableOpacity>
+                  </View>
+                : <View style={styles.rowContainer}>
+                    <TouchableOpacity
+                      style={[globalStyles.btn, globalStyles.btnOcean]}
+                      onPress={this.viewAnswer}
+                    >
+                      <Text style={globalStyles.normalText}>Check Answer</Text>
+                    </TouchableOpacity>
+                  </View>
+              }
+
+
 
             </View>
           // score mode
-          : <View style={styles.container}>
-              <Text style={styles.content}>
+          : <View style={globalStyles.container}>
+              <View style={{ margin: 30 }}>
+                <DeckScore
+                  size='large'
+                  score={this.getScore()}
+                />
+              </View>
+
+              <Text style={[globalStyles.focusText, { marginBottom: 20 }]}>
                 You got {this.state.correctAnswers} cards of a total of {deck.cards.length}
               </Text>
 
-              <Text style={styles.content}>
-                Your score is {this.getScore().toFixed(2)}%
-              </Text>
-
               <TouchableOpacity
-                style={[styles.btn, styles.btnOcean]}
+                style={[globalStyles.btn, globalStyles.btnOcean]}
                 onPress={() => this.props.navigation.replace(
                   'ShowQuiz', { deck }
                 )}
               >
-                <Text>Try Again</Text>
+                <Text style={globalStyles.normalText}>Try Again</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.btn, styles.btnOcean]}
+                style={[globalStyles.btn, globalStyles.btnOcean]}
                 onPress={() => this.props.navigation.goBack()}
               >
-                <Text>Back To Deck</Text>
+                <Text style={globalStyles.normalText}>Back To Deck</Text>
               </TouchableOpacity>
             </View>
         }
@@ -146,45 +154,17 @@ function mapDisptchToProps(dispatch, ownProps) {
 export default connect(undefined, mapDisptchToProps)(ShowQuiz)
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+  rowContainer: {
+    margin: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  header: {
-    marginTop: 20,
-    marginBottom: 5,
-    alignItems: 'center',
-    fontSize: fontSizes.focus,
-  },
-  content: {
-    margin: 10,
-    padding: 0,
-    textAlign: 'center',
   },
   quiz: {
+    flex: 1,
     marginVertical: 20,
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    margin: 10,
-    fontSize: 24,
-  },
-  btn: {
-    alignItems: 'center',
-    margin: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    width: 160,
-    borderRadius: 4,
-  },
-  btnOcean: {
-    backgroundColor: colors.ocean,
-  },
-  btnGrass: {
-    backgroundColor: colors.grass,
   },
 });

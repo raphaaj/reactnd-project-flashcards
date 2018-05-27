@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   Text,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -9,7 +8,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { addDeckAsync } from '../actions';
-import { colors, fontSizes } from '../utils/config';
+import { colors } from '../utils/config';
+import globalStyles from '../styles';
 import BoxTextInput from './BoxTextInput';
 
 const { height, width } = Dimensions.get('window');
@@ -52,7 +52,7 @@ class NewDeck extends Component {
 
     return (
       <KeyboardAvoidingView
-        style={styles.container}
+        style={globalStyles.container}
         behavior='padding'
       >
         <BoxTextInput
@@ -70,12 +70,12 @@ class NewDeck extends Component {
         />
 
         <TouchableOpacity
-          style={[styles.btn, styles.btnOcean]}
+          style={[globalStyles.btn, globalStyles.btnOcean]}
           onPress={this.addNewDeck}
         >
           {this.state.processing
             ? <ActivityIndicator size='small' color={colors.oil} />
-            : <Text style={styles.normalText}>
+            : <Text style={globalStyles.normalText}>
                 Create
               </Text>
           }
@@ -83,7 +83,7 @@ class NewDeck extends Component {
         </TouchableOpacity>
 
         {this.state.hasErrored &&
-          <Text style={[styles.normalText, styles.errorText]}>
+          <Text style={[globalStyles.normalText, { color: colors.red }]}>
             There was an error while creating the deck.
             Consider a different title for it.
           </Text>
@@ -101,38 +101,3 @@ function mapDispatchToProps(dispatch, ownProps) {
 }
 
 export default connect(undefined, mapDispatchToProps)(NewDeck);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  header: {
-    marginVertical: 20,
-    fontSize: fontSizes.focus,
-  },
-  normalText: {
-    textAlign: 'center',
-    fontSize: fontSizes.normal,
-    fontWeight: 'normal',
-  },
-  errorText: {
-    color: colors.red,
-  },
-  btn: {
-    alignItems: 'center',
-    margin: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    width: 160,
-    borderRadius: 4,
-  },
-  btnOcean: {
-    backgroundColor: colors.ocean,
-  },
-  btnGrass: {
-    backgroundColor: colors.grass,
-  },
-});

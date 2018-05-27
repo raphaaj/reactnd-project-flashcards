@@ -64,5 +64,4 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.focus,
     color: colors.oil,
   },
-  focus: {}
 });

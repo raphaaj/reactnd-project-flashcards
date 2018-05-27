@@ -4,6 +4,7 @@ export const colors = {
   oil: '#142c38',
   white: '#fff',
   black: '#000',
+  gray: '#999',
   red: '#af0c0c',
   lightGray: '#ddd',
   status: {
@@ -18,4 +19,6 @@ export const fontSizes = {
   small: 14,
   normal: 16,
   focus: 18,
+  big: 22,
+  huge: 28,
 }

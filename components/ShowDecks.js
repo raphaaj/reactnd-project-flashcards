@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { colors } from '../utils/config';
+import { colors, fontSizes } from '../utils/config';
+import globalStyles from '../styles';
 import DeckScore from './DeckScore';
-
-const { height, width } = Dimensions.get('window');
 
 class ShowDecks extends Component {
   renderDeck = ({ item: deckObject }) => (
@@ -16,8 +15,13 @@ class ShowDecks extends Component {
         )}
       >
         <View style={styles.deckData}>
-          <Text style={styles.deckTitle}>{deckObject.title}</Text>
-          <Text>{deckObject.cards.length} Cards</Text>
+          <Text style={[globalStyles.title, { fontSize: fontSizes.big }]}>
+            {deckObject.title}
+          </Text>
+
+          <Text style={globalStyles.lightText}>
+            {deckObject.cards.length} Cards
+          </Text>
         </View>
 
         <View style={styles.deckStatus}>
@@ -37,7 +41,7 @@ class ShowDecks extends Component {
     } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View style={globalStyles.container}>
         {decks.length > 0
           ? <FlatList
               data={decks}
@@ -60,23 +64,18 @@ function mapStateToProps(decksObject, ownProps) {
 
 export default connect(mapStateToProps)(ShowDecks);
 
+const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   deckContainer: {
     flexDirection: 'row',
-    margin: 10,
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    width: width - 40,
     alignItems: 'center',
-    borderColor: colors.oil,
+    margin: 15,
+    padding: 20,
+    width: width - 40,
+    borderColor: colors.lightGray,
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: 15,
+    elevation: 2,
   },
   deckData: {
     flex: 3,
@@ -85,9 +84,5 @@ const styles = StyleSheet.create({
   deckStatus: {
     flex: 1,
     alignItems: 'center',
-  },
-  deckTitle: {
-    fontSize: 20,
-    margin: 5,
   },
 });

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { colors } from '../utils/config';
+import globalStyles from '../styles';
 import DeckScore from './DeckScore';
 
 function getCardsNumberMessage(numberOfCards) {
@@ -28,36 +28,50 @@ class ShowDeck extends Component {
     return (
       deck === null || JSON.stringify(deck) === '{}'
         ? null
-        : <View style={styles.container}>
+        : <View style={globalStyles.container}>
 
-            <View style={styles.header}>
-              <Text style={styles.title}>{deck.title}</Text>
-              <DeckScore
-                size='large'
-                score={deck.bestScore || 0}
-              />
-              <Text>{deck.description}</Text>
-              <Text>{getCardsNumberMessage(deck.cards.length)}</Text>
-            </View>
+            <ScrollView contentContainerStyle={globalStyles.container}>
+              <Text style={[globalStyles.title, { margin: 10 }]}>
+                {deck.title}
+              </Text>
+
+              <Text style={globalStyles.lightText}>
+                {getCardsNumberMessage(deck.cards.length)}
+              </Text>
+
+              <View style={{ margin: 30 }}>
+                <DeckScore
+                  size='large'
+                  score={deck.bestScore || 0}
+                />
+              </View>
+
+              <Text style={globalStyles.normalText}>
+                {deck.description}
+              </Text>
+
+            </ScrollView>
 
             {deck.cards.length > 0 &&
               <TouchableOpacity
-                style={[styles.btn, styles.btnOcean]}
+                style={[globalStyles.btn, globalStyles.btnOcean]}
                 onPress={() => this.props.navigation.navigate(
                   'ShowQuiz', { deck: deck }
                 )}
               >
-                <Text>Start Quiz</Text>
+                <Text style={globalStyles.normalText}>
+                  Start Quiz
+                </Text>
               </TouchableOpacity>
             }
 
             <TouchableOpacity
-              style={[styles.btn, styles.btnGrass]}
+              style={[globalStyles.btn, globalStyles.btnOcean, { marginBottom: 30 }]}
               onPress={() => this.props.navigation.navigate(
                 'NewCard', { deckTitle: deck.title }
               )}
             >
-              <Text>Add a New Card</Text>
+              <Text style={globalStyles.normalText}>Add a New Card</Text>
             </TouchableOpacity>
 
           </View>
@@ -77,34 +91,3 @@ function mapStateToProps(decksObject, ownProps) {
 }
 
 export default connect(mapStateToProps)(ShowDeck);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  header: {
-    marginVertical: 20,
-    alignItems: 'center',
-  },
-  title: {
-    margin: 10,
-    fontSize: 24,
-  },
-  btn: {
-    alignItems: 'center',
-    margin: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    width: 160,
-    borderRadius: 4,
-  },
-  btnOcean: {
-    backgroundColor: colors.ocean,
-  },
-  btnGrass: {
-    backgroundColor: colors.grass,
-  },
-});
