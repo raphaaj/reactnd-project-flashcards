@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import globalStyles from '../styles';
+import { colors } from '../utils/config';
 import Deck from './Deck';
 
 class ShowDecks extends Component {
@@ -18,26 +19,34 @@ class ShowDecks extends Component {
 
   render() {
     const {
+      loading,
       decks,
     } = this.props;
 
     return (
       <View style={globalStyles.container}>
-        <FlatList
-          data={decks}
-          renderItem={this.renderDeck}
-          keyExtractor={(deck) => (deck.title)}
-        />
+        {loading
+          ? <ActivityIndicator size={'large'} color={colors.ocean} />
+          : decks.length < 1
+            ? <Text style={globalStyles.normalText}>
+                No Decks Available
+              </Text>
+            : <FlatList
+                data={decks}
+                renderItem={this.renderDeck}
+                keyExtractor={(deck) => (deck.title)}
+              />
+        }
       </View>
     );
   }
 }
 
-function mapStateToProps(decksObject, ownProps) {
+function mapStateToProps({ loading, decks: decksObject }, ownProps) {
   const deckTitles = Object.keys(decksObject);
   const decks = deckTitles.map((deckTitle) => ({ ...decksObject[deckTitle] }));
 
-  return { decks };
+  return { loading, decks };
 }
 
 export default connect(mapStateToProps)(ShowDecks);

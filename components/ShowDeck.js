@@ -79,7 +79,7 @@ class ShowDeck extends Component {
   }
 }
 
-function mapStateToProps(decksObject, ownProps) {
+function mapStateToProps({ decks: decksObject}, ownProps) {
   const deckTitle = ownProps.navigation.state.params.deckTitle;
   const deck = decksObject[deckTitle] !== undefined
     ? decksObject[deckTitle]

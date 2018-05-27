@@ -1,9 +1,17 @@
 import * as DecksAPI from '../utils/DecksAPI';
 
+export const DECKS_LOADING = 'DECKS_LOADING';
 export const DECKS_SET = 'DECKS_SET';
 export const DECKS_ADD = 'DECKS_ADD';
 export const DECKS_ADD_CARD = 'DECKS_ADD_CARD';
 export const DECKS_SET_BESTSCORE = 'DECKS_SET_BESTSCORE';
+
+export function setLoading(loading) {
+  return {
+    type: DECKS_LOADING,
+    loading,
+  };
+}
 
 export function setDecks(decks) {
   return {
@@ -37,11 +45,13 @@ export function setDeckBestScore(deckTitle, bestScore) {
 
 export function syncDecksAsync() {
   return (dispatch) => {
+    dispatch(setLoading(true));
     DecksAPI.getDecks()
       .then((decks) => {
         if (decks !== null) {
           dispatch(setDecks(decks));
         }
+        dispatch(setLoading(false));
       })
   }
 }
