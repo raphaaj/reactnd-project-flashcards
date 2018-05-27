@@ -63,16 +63,12 @@ export function addCardToDeckAsync(deckTitle, cardObject) {
   return (dispatch) => {
     return DecksAPI.addCardToDeck(deckTitle, cardObject)
       .then((createdCard) => {
-        console.log(createdCard)
         if (createdCard !== null) {
           dispatch(addCardToDeck(deckTitle, createdCard));
         }
         return createdCard;
       })
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
+      .catch(() => null);
   }
 }
 
