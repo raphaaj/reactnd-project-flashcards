@@ -40,7 +40,7 @@ class NewDeck extends Component {
       .then((createdDeck) => {
         if (createdDeck !== null) {
           this.setState({ deckTitle: '', deckDescription: '' });
-          this.props.navigation.goBack();
+          this.props.navigation.navigate('ShowDeck', { deckTitle: createdDeck.title });
         } else {
           this.setState({ hasErrored: true });
         }
