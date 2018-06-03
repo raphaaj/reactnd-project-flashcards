@@ -28,8 +28,6 @@ class ShowQuiz extends Component {
     const deckObject = this.props.navigation.state.params.deck;
     if (this.state.cardIndex + 1 === deckObject.cards.length) {
       const currentScore = this.getScore();
-      clearLocalNotification().then(setLocalNotification);
-
       if (deckObject.bestScore === null || currentScore > deckObject.bestScore) {
         this.props.setNewBestScore(deckObject.title, currentScore);
       }
@@ -53,6 +51,11 @@ class ShowQuiz extends Component {
     const score = (100 * this.state.correctAnswers/numberOfCards);
 
     return score;
+  }
+
+  getScoreAndUpdateNotification = () => {
+    clearLocalNotification().then(setLocalNotification);
+    return this.getScore();
   }
 
   render() {
@@ -115,7 +118,7 @@ class ShowQuiz extends Component {
               <View style={{ margin: 30 }}>
                 <DeckScore
                   size='large'
-                  score={this.getScore()}
+                  score={this.getScoreAndUpdateNotification()}
                 />
               </View>
 
