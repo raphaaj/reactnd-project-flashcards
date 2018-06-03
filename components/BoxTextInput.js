@@ -23,10 +23,15 @@ export default class BoxTextInput extends Component {
   }
 
   render() {
+    const { hasErrored } = this.props;
+
     const borderColorConfig = this.state.borderAnimation.interpolate({
-      inputRange: [0, 0.2, 0.4, 0.6, 0.8, 1],
-      outputRange: [colors.white, '#9bb4c1', '#7c9eaf', '#55798c', '#254251', colors.oil],
-    })
+      inputRange: [0, 1],
+      outputRange: [
+        hasErrored ? colors.red : colors.white,
+        colors.oil
+      ],
+    });
 
     const inputStyle = this.props.style
       ? [styles.inputBox, this.props.style]

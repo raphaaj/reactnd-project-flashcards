@@ -22,6 +22,8 @@ class NewCard extends Component {
     answer: '',
     processing: false,
     hasErrored: false,
+    hasErroredQuestion: false,
+    hasErroredAnswer: false,
   }
 
   updateCardQuestion = (question) => this.setState({ question })
@@ -29,16 +31,29 @@ class NewCard extends Component {
   updateCardAnswer = (answer) => this.setState({ answer })
 
   addNewCard = () => {
-    this.setState({
-      processing: true,
-      hasErrored: false,
-    });
-
     const deckTitle = this.props.navigation.state.params.deckTitle;
     const cardObject = {
-      question: this.state.question,
-      answer: this.state.answer,
+      question: this.state.question.trim(),
+      answer: this.state.answer.trim(),
     };
+
+    if (!cardObject.question.length) {
+      this.setState({ hasErroredQuestion: true });
+      return;
+    } else if (!cardObject.answer.length) {
+      this.setState({
+        hasErroredQuestion: false,
+        hasErroredAnswer: true,
+      });
+      return;
+    } else {
+      this.setState({
+        processing: true,
+        hasErrored: false,
+        hasErroredQuestion: false,
+        hasErroredAnswer: false,
+      });
+    }
 
     this.props.addCard(deckTitle, cardObject)
       .then((createdCard) => {
@@ -75,6 +90,7 @@ class NewCard extends Component {
           placeholder='Question'
           value={this.state.question}
           onChangeText={this.updateCardQuestion}
+          hasErrored={this.state.hasErroredQuestion}
           multiline
           numberOfLines={2}
         />
@@ -83,6 +99,7 @@ class NewCard extends Component {
           placeholder='Answer'
           value={this.state.answer}
           onChangeText={this.updateCardAnswer}
+          hasErrored={this.state.hasErroredAnswer}
           multiline
           numberOfLines={2}
         />
@@ -103,6 +120,18 @@ class NewCard extends Component {
         {this.state.hasErrored &&
           <Text style={[globalStyles.normalText, { color: colors.red }]}>
             There was an error while creating the card.
+          </Text>
+        }
+
+        {this.state.hasErroredQuestion &&
+          <Text style={[globalStyles.normalText, { color: colors.red }]}>
+            The question input cannot be empty.
+          </Text>
+        }
+
+        {this.state.hasErroredAnswer &&
+          <Text style={[globalStyles.normalText, { color: colors.red }]}>
+            The answer input cannot be empty.
           </Text>
         }
 

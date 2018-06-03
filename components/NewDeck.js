@@ -27,12 +27,22 @@ class NewDeck extends Component {
   updateDeckDescription = (deckDescription) => this.setState({ deckDescription })
 
   addNewDeck = () => {
-    this.setState({
-      processing: true,
-      hasErrored: false,
-    });
+    const deckTitle = this.state.deckTitle.trim();
+    const deckDescription = this.state.deckDescription.trim();
 
-    this.props.addDeck(this.state.deckTitle, this.state.deckDescription)
+    if (!deckTitle.length) {
+      this.setState({
+        hasErrored: true,
+      });
+      return;
+    } else {
+      this.setState({
+        processing: true,
+        hasErrored: false,
+      });
+    }
+
+    this.props.addDeck(deckTitle, deckDescription)
       .then((createdDeck) => {
         this.setState({ processing: false });
         return createdDeck;
@@ -59,6 +69,7 @@ class NewDeck extends Component {
           placeholder='Title'
           value={this.state.deckTitle}
           onChangeText={this.updateDeckTitle}
+          hasErrored={this.state.hasErrored}
         />
 
         <BoxTextInput
@@ -85,7 +96,7 @@ class NewDeck extends Component {
         {this.state.hasErrored &&
           <Text style={[globalStyles.normalText, { color: colors.red }]}>
             There was an error while creating the deck.
-            Consider a different title for it.
+            Consider a different, nonempty, title for it.
           </Text>
         }
 
