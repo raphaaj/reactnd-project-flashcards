@@ -13,6 +13,22 @@ export default class Deck extends Component {
     borderAnimation: new Animated.Value(0),
   }
 
+  getNumberOfCardsMessage = () => {
+    const numberOfCards = this.props.deckObject.cards.length;
+
+    switch (numberOfCards) {
+      case 0:
+        return 'Empty';
+
+      case 1:
+        return '1 Card';
+
+      default:
+        return `${numberOfCards} Cards`;
+
+    }
+  }
+
   onDeckPress = (deckTitle) => {
     Animated.timing(
       this.state.borderAnimation,
@@ -49,7 +65,7 @@ export default class Deck extends Component {
               </Text>
 
               <Text style={globalStyles.lightText}>
-                {deckObject.cards.length} Cards
+                {this.getNumberOfCardsMessage()}
               </Text>
             </View>
 
